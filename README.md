@@ -2,6 +2,11 @@
 
 A full-stack Notes application with authentication, role-based access control (RBAC), admin panel, and CRUD operations for multiple resources.
 
+<img width="1920" height="898" alt="image" src="https://github.com/user-attachments/assets/b7c87b47-4ba7-4dc8-97b9-2b548b5d65da" />
+
+<img width="1920" height="901" alt="image" src="https://github.com/user-attachments/assets/4ee4a5b6-63cf-4058-8e94-14fc3320ae19" />
+
+
 ## 🎯 Project Overview
 
 This project is a complete Notes Application built with:
