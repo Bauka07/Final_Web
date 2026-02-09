@@ -1,6 +1,6 @@
-# Notes App - Assignment 4
+# Notes App - Final Project
 
-A full-stack Notes application with authentication, role-based access control (RBAC), admin panel, and CRUD operations for multiple resources.
+A full-stack Notes application with authentication, role-based access control (RBAC), admin panel, Google OAuth, dark mode, advanced search, and file attachments.
 
 <img width="1920" height="775" alt="image" src="https://github.com/user-attachments/assets/23cd80fa-cd1c-46b9-8427-0a544b11bf9f" />
 <img width="1920" height="916" alt="image" src="https://github.com/user-attachments/assets/dbdb48ef-e72b-440b-81c7-6758bfac5e6c" />
@@ -21,13 +21,17 @@ This project is a complete Notes Application built with:
 
 - **Backend**: Node.js, Express.js
 - **Database**: MongoDB (Mongoose ODM)
-- **Authentication**: JWT (JSON Web Tokens)
+- **Authentication**: JWT + Google OAuth 2.0
 - **Password Security**: bcrypt for password hashing
+- **File Storage**: Cloudinary (images & PDFs)
+- **PDF Generation**: PDFKit
 - **Frontend**: Vanilla JavaScript, HTML5, CSS3
 
 ## ✨ Features
 
+### Core Features
 - ✅ User Registration & Login with JWT
+- ✅ **Google OAuth 2.0 Authentication** 🆕
 - ✅ Password hashing with bcrypt
 - ✅ Role-Based Access Control (Admin/User)
 - ✅ Admin Panel with full CRUD for all resources
@@ -36,6 +40,16 @@ This project is a complete Notes Application built with:
 - ✅ Beautiful landing page for non-authenticated users
 - ✅ Modern responsive UI design
 
+### New Advanced Features 🎉
+- ✅ **Dark Mode Toggle** - Switch between light and dark themes 🌙
+- ✅ **Archive Notes** - Hide notes without deleting them 📦
+- ✅ **Trash/Soft Delete** - Move notes to trash with restore option 🗑️
+- ✅ **Advanced Search & Filters** - Search by keyword, category, date range 🔍
+- ✅ **Image Attachments** - Upload images/PDFs to notes via Cloudinary 📎
+- ✅ **Export to PDF** - Download notes as beautifully formatted PDF files 📄
+- ✅ **Multiple Sort Options** - Sort by date, title, or update time
+- ✅ **Google Sign-In** - One-click authentication with Google account
+
 ## 📦 Models (Objects)
 
 ### 1. User Model
@@ -43,7 +57,11 @@ This project is a complete Notes Application built with:
 **Fields:**
 
 - `email` - String (required, unique, validated)
-- `password` - String (required, hashed with bcrypt)
+- `password` - String (required for local auth, hashed with bcrypt)
+- `provider` - Enum: "local", "google" (default: "local") 🆕
+- `googleId` - String (unique, for Google OAuth users) 🆕
+- `displayName` - String (from Google profile) 🆕
+- `profilePicture` - String (Google profile picture URL) 🆕
 - `role` - Enum: "user", "admin" (default: "user")
 - `createdAt`, `updatedAt` - Timestamps
 

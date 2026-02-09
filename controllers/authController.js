@@ -137,3 +137,36 @@ export const getMe = async (req, res, next) => {
     next(error);
   }
 };
+
+// Google OAuth callback
+export const googleCallback = async (req, res) => {
+  try {
+    // Generate JWT token for the Google authenticated user
+    const token = jwt.sign(
+      { id: req.user._id, role: req.user.role },
+      process.env.JWT_SECRET,
+      {
+        expiresIn: process.env.JWT_EXPIRES_IN,
+      }
+    );
+
+    // Redirect to frontend with token
+    res.redirect(`http://localhost:3000?token=${token}&user=${encodeURIComponent(JSON.stringify({ 
+      id: req.user._id, 
+      email: req.user.email, 
+      role: req.user.role,
+      displayName: req.user.displayName,
+      profilePicture: req.user.profilePicture
+    }))}`);
+  } catch (error) {
+    res.redirect("http://localhost:3000?error=authentication_failed");
+  }
+};
+
+// Google OAuth failure
+export const googleAuthFailed = (req, res) => {
+  res.status(401).json({
+    success: false,
+    error: "Google authentication failed",
+  });
+};

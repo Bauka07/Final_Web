@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:3000/api";
+const API_URL = "http://localhost:8080/api";
 
 // Auth state
 let authToken = localStorage.getItem("token");
@@ -143,16 +143,16 @@ tagFilter.addEventListener("change", (e) => {
 });
 
 showPinnedBtn.addEventListener("click", () => {
-  currentFilter.isPinned = true;
+  currentFilter = { isPinned: "true", isArchived: "false", isDeleted: "false" };
+  updateActiveNavItem(showPinnedBtn);
   loadNotes();
 });
 
 showAllBtn.addEventListener("click", () => {
-  currentFilter.isPinned = null;
-  currentFilter.category = "";
-  currentFilter.tag = "";
+  currentFilter = { isArchived: "false", isDeleted: "false" };
   categoryFilter.value = "";
   tagFilter.value = "";
+  updateActiveNavItem(showAllBtn);
   loadNotes();
 });
 
@@ -288,6 +288,7 @@ function logout() {
 // ===== Note Functions =====
 function openModal(note = null) {
   selectedTags = [];
+  uploadedAttachments = [];
 
   if (note) {
     editingNoteId = note._id;
@@ -304,12 +305,18 @@ function openModal(note = null) {
       );
       renderSelectedTags();
     }
+
+    if (note.attachments && note.attachments.length > 0) {
+      uploadedAttachments = note.attachments;
+      displayAttachments();
+    }
   } else {
     editingNoteId = null;
     modalTitle.textContent = "Create New Note";
     noteForm.reset();
     document.getElementById("color").value = "#ffffff";
     renderSelectedTags();
+    attachmentsList.innerHTML = "";
   }
   noteModal.style.display = "block";
 }
@@ -488,9 +495,29 @@ function displayNotes(notes) {
 
       <div class="note-content">${escapeHtml(note.content)}</div>
 
+      ${note.attachments && note.attachments.length > 0 ? `
+        <div class="note-attachments">
+          ${note.attachments.map(att => `
+            <a href="${att.url}" target="_blank" class="attachment-link">
+              📎 ${att.filename}
+            </a>
+          `).join('')}
+        </div>
+      ` : ''}
+
       <div class="note-actions">
-        <button class="btn btn-secondary btn-sm" onclick="editNote('${note._id}')">✏️ Edit</button>
-        <button class="btn btn-danger btn-sm" onclick="deleteNote('${note._id}')">🗑️ Delete</button>
+        ${note.isDeleted ? `
+          <button class="btn btn-restore btn-sm" onclick="restoreNote('${note._id}')">↩️ Restore</button>
+          <button class="btn btn-danger btn-sm" onclick="permanentDeleteNote('${note._id}')">🗑️ Delete Forever</button>
+        ` : note.isArchived ? `
+          <button class="btn btn-restore btn-sm" onclick="toggleArchiveNote('${note._id}')">↩️ Unarchive</button>
+          <button class="btn btn-danger btn-sm" onclick="deleteNote('${note._id}')">🗑️ Delete</button>
+        ` : `
+          <button class="btn btn-secondary btn-sm" onclick="editNote('${note._id}')">✏️ Edit</button>
+          <button class="btn btn-archive btn-sm" onclick="toggleArchiveNote('${note._id}')">📦 Archive</button>
+          <button class="btn btn-pdf btn-sm" onclick="exportNoteToPDF('${note._id}')">📄 PDF</button>
+          <button class="btn btn-danger btn-sm" onclick="deleteNote('${note._id}')">🗑️ Trash</button>
+        `}
       </div>
     </div>
   `,
@@ -629,3 +656,306 @@ function escapeHtml(text) {
   div.textContent = text;
   return div.innerHTML;
 }
+
+// ===== NEW FEATURES =====
+
+// Dark Mode Toggle
+const darkModeToggle = document.getElementById("darkModeToggle");
+const darkMode = localStorage.getItem("darkMode") === "true";
+
+if (darkMode) {
+  document.body.classList.add("dark-mode");
+  if (darkModeToggle) darkModeToggle.textContent = "☀️";
+}
+
+darkModeToggle?.addEventListener("click", () => {
+  document.body.classList.toggle("dark-mode");
+  const isDark = document.body.classList.contains("dark-mode");
+  localStorage.setItem("darkMode", isDark);
+  darkModeToggle.textContent = isDark ? "☀️" : "🌙";
+});
+
+// Google OAuth Callback
+window.addEventListener("load", () => {
+  const urlParams = new URLSearchParams(window.location.search);
+  const token = urlParams.get("token");
+  const user = urlParams.get("user");
+
+  if (token && user) {
+    const userData = JSON.parse(decodeURIComponent(user));
+    localStorage.setItem("token", token);
+    localStorage.setItem("userEmail", userData.email);
+    if (userData.displayName) {
+      localStorage.setItem("displayName", userData.displayName);
+    }
+    if (userData.profilePicture) {
+      localStorage.setItem("profilePicture", userData.profilePicture);
+    }
+    authToken = token;
+    currentUser = userData.email;
+    
+    // Clean URL
+    window.history.replaceState({}, document.title, "/");
+    
+    // Show dashboard
+    checkAuthStatus();
+    loadNotes();
+    loadAllTags();
+  }
+
+  const error = urlParams.get("error");
+  if (error) {
+    alert("Google authentication failed. Please try again.");
+    window.history.replaceState({}, document.title, "/");
+  }
+});
+
+// Archive/Trash Buttons
+const showArchivedBtn = document.getElementById("showArchivedBtn");
+const showTrashBtn = document.getElementById("showTrashBtn");
+
+showArchivedBtn?.addEventListener("click", () => {
+  currentFilter = { isArchived: "true" };
+  updateActiveNavItem(showArchivedBtn);
+  loadNotes();
+});
+
+showTrashBtn?.addEventListener("click", () => {
+  currentFilter = { isDeleted: "true" };
+  updateActiveNavItem(showTrashBtn);
+  loadNotes();
+});
+
+function updateActiveNavItem(activeBtn) {
+  document.querySelectorAll(".nav-item").forEach(btn => btn.classList.remove("active"));
+  activeBtn.classList.add("active");
+}
+
+// Archive Note
+async function toggleArchiveNote(noteId) {
+  try {
+    const response = await fetch(`${API_URL}/notes/${noteId}/archive`, {
+      method: "PATCH",
+      headers: {
+        Authorization: `Bearer ${authToken}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    const data = await response.json();
+    if (data.success) {
+      loadNotes();
+    } else {
+      alert(data.error || "Error archiving note");
+    }
+  } catch (error) {
+    console.error("Error archiving note:", error);
+    alert("Error archiving note");
+  }
+}
+
+// Restore Note
+async function restoreNote(noteId) {
+  try {
+    const response = await fetch(`${API_URL}/notes/${noteId}/restore`, {
+      method: "PATCH",
+      headers: {
+        Authorization: `Bearer ${authToken}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    const data = await response.json();
+    if (data.success) {
+      loadNotes();
+    } else {
+      alert(data.error || "Error restoring note");
+    }
+  } catch (error) {
+    console.error("Error restoring note:", error);
+    alert("Error restoring note");
+  }
+}
+
+// Permanent Delete
+async function permanentDeleteNote(noteId) {
+  if (!confirm("Are you sure? This action cannot be undone!")) return;
+
+  try {
+    const response = await fetch(`${API_URL}/notes/${noteId}/permanent`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${authToken}`,
+      },
+    });
+
+    const data = await response.json();
+    if (data.success) {
+      loadNotes();
+    } else {
+      alert(data.error || "Error deleting note");
+    }
+  } catch (error) {
+    console.error("Error deleting note:", error);
+    alert("Error deleting note");
+  }
+}
+
+// Export to PDF
+async function exportNoteToPDF(noteId) {
+  try {
+    window.location.href = `${API_URL}/notes/${noteId}/export/pdf?token=${authToken}`;
+  } catch (error) {
+    console.error("Error exporting PDF:", error);
+    alert("Error exporting PDF");
+  }
+}
+
+// Advanced Search
+const advancedSearchBtn = document.getElementById("advancedSearchBtn");
+const advancedSearchModal = document.getElementById("advancedSearchModal");
+const closeAdvancedSearch = document.getElementById("closeAdvancedSearch");
+const advancedSearchForm = document.getElementById("advancedSearchForm");
+const clearSearchBtn = document.getElementById("clearSearchBtn");
+const searchInput = document.getElementById("searchInput");
+
+advancedSearchBtn?.addEventListener("click", () => {
+  advancedSearchModal.style.display = "flex";
+});
+
+closeAdvancedSearch?.addEventListener("click", () => {
+  advancedSearchModal.style.display = "none";
+});
+
+advancedSearchModal?.querySelector(".modal-overlay")?.addEventListener("click", () => {
+  advancedSearchModal.style.display = "none";
+});
+
+advancedSearchForm?.addEventListener("submit", (e) => {
+  e.preventDefault();
+  
+  const keyword = document.getElementById("searchKeyword").value;
+  const category = document.getElementById("searchCategory").value;
+  const dateFrom = document.getElementById("searchDateFrom").value;
+  const dateTo = document.getElementById("searchDateTo").value;
+  const sortBy = document.getElementById("searchSortBy").value;
+
+  currentFilter = {};
+  if (keyword) currentFilter.search = keyword;
+  if (category) currentFilter.category = category;
+  if (dateFrom) currentFilter.dateFrom = dateFrom;
+  if (dateTo) currentFilter.dateTo = dateTo;
+  if (sortBy) currentFilter.sortBy = sortBy;
+
+  loadNotes();
+  advancedSearchModal.style.display = "none";
+});
+
+clearSearchBtn?.addEventListener("click", () => {
+  document.getElementById("searchKeyword").value = "";
+  document.getElementById("searchCategory").value = "";
+  document.getElementById("searchDateFrom").value = "";
+  document.getElementById("searchDateTo").value = "";
+  document.getElementById("searchSortBy").value = "newest";
+  currentFilter = {};
+  loadNotes();
+  advancedSearchModal.style.display = "none";
+});
+
+// Simple Search
+searchInput?.addEventListener("input", (e) => {
+  const keyword = e.target.value;
+  if (keyword) {
+    currentFilter.search = keyword;
+  } else {
+    delete currentFilter.search;
+  }
+  loadNotes();
+});
+
+// Attachment Upload
+const addAttachmentBtn = document.getElementById("addAttachmentBtn");
+const attachmentInput = document.getElementById("attachmentInput");
+const attachmentsList = document.getElementById("attachmentsList");
+let uploadedAttachments = [];
+
+addAttachmentBtn?.addEventListener("click", () => {
+  attachmentInput.click();
+});
+
+attachmentInput?.addEventListener("change", async (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+
+  if (!editingNoteId) {
+    alert("Please save the note first before adding attachments");
+    return;
+  }
+
+  const formData = new FormData();
+  formData.append("file", file);
+
+  try {
+    const response = await fetch(`${API_URL}/notes/${editingNoteId}/attachments`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${authToken}`,
+      },
+      body: formData,
+    });
+
+    const data = await response.json();
+    if (data.success) {
+      uploadedAttachments.push(data.data);
+      displayAttachments();
+      attachmentInput.value = "";
+    } else {
+      alert(data.error || "Error uploading attachment");
+    }
+  } catch (error) {
+    console.error("Error uploading attachment:", error);
+    alert("Error uploading attachment");
+  }
+});
+
+function displayAttachments() {
+  attachmentsList.innerHTML = uploadedAttachments.map(att => `
+    <div class="attachment-item">
+      ${att.url.match(/\.(jpg|jpeg|png|gif|webp)$/i) ? 
+        `<img src="${att.url}" alt="${att.filename}">` : 
+        `<span>📄</span>`
+      }
+      <span class="attachment-name">${att.filename}</span>
+      <button type="button" class="remove-attachment" onclick="removeAttachment('${att._id}')">✕</button>
+    </div>
+  `).join("");
+}
+
+async function removeAttachment(attachmentId) {
+  try {
+    const response = await fetch(`${API_URL}/notes/${editingNoteId}/attachments/${attachmentId}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${authToken}`,
+      },
+    });
+
+    const data = await response.json();
+    if (data.success) {
+      uploadedAttachments = uploadedAttachments.filter(att => att._id !== attachmentId);
+      displayAttachments();
+    } else {
+      alert(data.error || "Error removing attachment");
+    }
+  } catch (error) {
+    console.error("Error removing attachment:", error);
+    alert("Error removing attachment");
+  }
+}
+
+// Update displayNote function to show new action buttons
+window.toggleArchiveNote = toggleArchiveNote;
+window.restoreNote = restoreNote;
+window.permanentDeleteNote = permanentDeleteNote;
+window.exportNoteToPDF = exportNoteToPDF;
+window.removeAttachment = removeAttachment;

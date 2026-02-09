@@ -39,6 +39,29 @@ const noteSchema = new mongoose.Schema(
         ref: "Tag",
       },
     ],
+    isArchived: {
+      type: Boolean,
+      default: false,
+    },
+    isDeleted: {
+      type: Boolean,
+      default: false,
+    },
+    deletedAt: {
+      type: Date,
+      default: null,
+    },
+    attachments: [
+      {
+        url: String,
+        publicId: String,
+        filename: String,
+        uploadedAt: {
+          type: Date,
+          default: Date.now,
+        },
+      },
+    ],
   },
   {
     timestamps: true,
@@ -49,5 +72,6 @@ const noteSchema = new mongoose.Schema(
 noteSchema.index({ title: "text", content: "text" });
 noteSchema.index({ category: 1 });
 noteSchema.index({ isPinned: -1, createdAt: -1 });
+noteSchema.index({ isDeleted: 1, isArchived: 1 });
 
 export default mongoose.model("Note", noteSchema);
