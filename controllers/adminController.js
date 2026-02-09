@@ -4,8 +4,6 @@ import Category from "../models/Category.js";
 import Tag from "../models/Tag.js";
 import validateObjectId from "../utils/validateObjectId.js";
 
-// ===== USER MANAGEMENT =====
-
 export const getAllUsers = async (req, res, next) => {
   try {
     const users = await User.find().select("-password").sort({ createdAt: -1 });
@@ -72,7 +70,9 @@ export const deleteUser = async (req, res, next) => {
 
     // Prevent deleting yourself
     if (user._id.toString() === req.user.id) {
-      return res.status(400).json({ success: false, error: "Cannot delete yourself" });
+      return res
+        .status(400)
+        .json({ success: false, error: "Cannot delete yourself" });
     }
 
     // Delete all notes by this user
@@ -85,7 +85,7 @@ export const deleteUser = async (req, res, next) => {
   }
 };
 
-// ===== NOTES MANAGEMENT (ALL USERS' NOTES) =====
+//  NOTES MANAGEMENT
 
 export const getAllNotesAdmin = async (req, res, next) => {
   try {
@@ -121,7 +121,7 @@ export const deleteNoteAdmin = async (req, res, next) => {
   }
 };
 
-// ===== CATEGORY MANAGEMENT =====
+//CATEGORY MANAGEMENT
 
 export const createCategoryAdmin = async (req, res, next) => {
   try {
@@ -135,7 +135,9 @@ export const createCategoryAdmin = async (req, res, next) => {
 export const updateCategoryAdmin = async (req, res, next) => {
   try {
     if (!validateObjectId(req.params.id)) {
-      return res.status(400).json({ success: false, error: "Invalid category ID" });
+      return res
+        .status(400)
+        .json({ success: false, error: "Invalid category ID" });
     }
 
     const category = await Category.findByIdAndUpdate(req.params.id, req.body, {
@@ -144,7 +146,9 @@ export const updateCategoryAdmin = async (req, res, next) => {
     });
 
     if (!category) {
-      return res.status(404).json({ success: false, error: "Category not found" });
+      return res
+        .status(404)
+        .json({ success: false, error: "Category not found" });
     }
     res.status(200).json({ success: true, data: category });
   } catch (error) {
@@ -155,12 +159,16 @@ export const updateCategoryAdmin = async (req, res, next) => {
 export const deleteCategoryAdmin = async (req, res, next) => {
   try {
     if (!validateObjectId(req.params.id)) {
-      return res.status(400).json({ success: false, error: "Invalid category ID" });
+      return res
+        .status(400)
+        .json({ success: false, error: "Invalid category ID" });
     }
 
     const category = await Category.findByIdAndDelete(req.params.id);
     if (!category) {
-      return res.status(404).json({ success: false, error: "Category not found" });
+      return res
+        .status(404)
+        .json({ success: false, error: "Category not found" });
     }
     res.status(200).json({ success: true, data: {} });
   } catch (error) {
@@ -168,7 +176,7 @@ export const deleteCategoryAdmin = async (req, res, next) => {
   }
 };
 
-// ===== TAG MANAGEMENT =====
+//TAG MANAGEMENT
 
 export const createTagAdmin = async (req, res, next) => {
   try {
@@ -227,16 +235,17 @@ export const deleteTagAdmin = async (req, res, next) => {
   }
 };
 
-// ===== DASHBOARD STATS =====
+//  DASHBOARD STATS
 
 export const getDashboardStats = async (req, res, next) => {
   try {
-    const [usersCount, notesCount, categoriesCount, tagsCount] = await Promise.all([
-      User.countDocuments(),
-      Note.countDocuments(),
-      Category.countDocuments(),
-      Tag.countDocuments(),
-    ]);
+    const [usersCount, notesCount, categoriesCount, tagsCount] =
+      await Promise.all([
+        User.countDocuments(),
+        Note.countDocuments(),
+        Category.countDocuments(),
+        Tag.countDocuments(),
+      ]);
 
     const recentUsers = await User.find()
       .select("-password")

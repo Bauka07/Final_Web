@@ -19,14 +19,14 @@ const createAdmin = async () => {
       password: "baukagoi",
       role: "admin",
     });
-    
+
     await admin.save();
     console.log("Created admin user: bauka@gmail.com");
 
     console.log("\nAdmin credentials:");
     console.log("  Email: bauka@gmail.com");
     console.log("  Password: baukagoi");
-    
+
     process.exit(0);
   } catch (error) {
     console.error("Error:", error);

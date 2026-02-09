@@ -39,11 +39,15 @@ document.querySelectorAll(".admin-nav-item").forEach((btn) => {
     const section = btn.dataset.section;
 
     // Update active nav
-    document.querySelectorAll(".admin-nav-item").forEach((b) => b.classList.remove("active"));
+    document
+      .querySelectorAll(".admin-nav-item")
+      .forEach((b) => b.classList.remove("active"));
     btn.classList.add("active");
 
     // Show section
-    document.querySelectorAll(".admin-section").forEach((s) => s.classList.remove("active"));
+    document
+      .querySelectorAll(".admin-section")
+      .forEach((s) => s.classList.remove("active"));
     document.getElementById(`${section}Section`).classList.add("active");
 
     // Load data
@@ -116,7 +120,7 @@ async function loadDashboard() {
             </div>
             <span class="recent-item-badge ${user.role}">${user.role}</span>
           </div>
-        `
+        `,
         )
         .join("");
 
@@ -131,7 +135,7 @@ async function loadDashboard() {
             </div>
             <span class="recent-item-badge">${note.category}</span>
           </div>
-        `
+        `,
         )
         .join("");
     }
@@ -163,7 +167,7 @@ async function loadUsers() {
               </div>
             </td>
           </tr>
-        `
+        `,
         )
         .join("");
     }
@@ -179,37 +183,44 @@ function editUser(id, email, role) {
   document.getElementById("editUserModal").style.display = "block";
 }
 
-document.getElementById("editUserForm").addEventListener("submit", async (e) => {
-  e.preventDefault();
+document
+  .getElementById("editUserForm")
+  .addEventListener("submit", async (e) => {
+    e.preventDefault();
 
-  const id = document.getElementById("editUserId").value;
-  const email = document.getElementById("editUserEmail").value;
-  const role = document.getElementById("editUserRole").value;
+    const id = document.getElementById("editUserId").value;
+    const email = document.getElementById("editUserEmail").value;
+    const role = document.getElementById("editUserRole").value;
 
-  try {
-    const response = await fetch(`${API_URL}/admin/users/${id}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${authToken}`,
-      },
-      body: JSON.stringify({ email, role }),
-    });
-    const result = await response.json();
+    try {
+      const response = await fetch(`${API_URL}/admin/users/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${authToken}`,
+        },
+        body: JSON.stringify({ email, role }),
+      });
+      const result = await response.json();
 
-    if (result.success) {
-      document.getElementById("editUserModal").style.display = "none";
-      loadUsers();
-    } else {
-      alert(result.error);
+      if (result.success) {
+        document.getElementById("editUserModal").style.display = "none";
+        loadUsers();
+      } else {
+        alert(result.error);
+      }
+    } catch (error) {
+      console.error("Error updating user:", error);
     }
-  } catch (error) {
-    console.error("Error updating user:", error);
-  }
-});
+  });
 
 async function deleteUser(id) {
-  if (!confirm("Are you sure you want to delete this user? All their notes will also be deleted.")) return;
+  if (
+    !confirm(
+      "Are you sure you want to delete this user? All their notes will also be deleted.",
+    )
+  )
+    return;
 
   try {
     const response = await fetch(`${API_URL}/admin/users/${id}`, {
@@ -252,7 +263,7 @@ async function loadNotes() {
               </div>
             </td>
           </tr>
-        `
+        `,
         )
         .join("");
     }
@@ -311,7 +322,7 @@ async function loadCategories() {
               </div>
             </td>
           </tr>
-        `
+        `,
         )
         .join("");
     }
@@ -338,42 +349,46 @@ function editCategory(cat) {
   document.getElementById("categoryModal").style.display = "block";
 }
 
-document.getElementById("categoryForm").addEventListener("submit", async (e) => {
-  e.preventDefault();
+document
+  .getElementById("categoryForm")
+  .addEventListener("submit", async (e) => {
+    e.preventDefault();
 
-  const id = document.getElementById("categoryId").value;
-  const data = {
-    name: document.getElementById("categoryName").value,
-    description: document.getElementById("categoryDescription").value,
-    icon: document.getElementById("categoryIcon").value,
-    color: document.getElementById("categoryColor").value,
-  };
+    const id = document.getElementById("categoryId").value;
+    const data = {
+      name: document.getElementById("categoryName").value,
+      description: document.getElementById("categoryDescription").value,
+      icon: document.getElementById("categoryIcon").value,
+      color: document.getElementById("categoryColor").value,
+    };
 
-  try {
-    const url = id ? `${API_URL}/admin/categories/${id}` : `${API_URL}/admin/categories`;
-    const method = id ? "PUT" : "POST";
+    try {
+      const url = id
+        ? `${API_URL}/admin/categories/${id}`
+        : `${API_URL}/admin/categories`;
+      const method = id ? "PUT" : "POST";
 
-    const response = await fetch(url, {
-      method,
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${authToken}`,
-      },
-      body: JSON.stringify(data),
-    });
-    const result = await response.json();
+      const response = await fetch(url, {
+        method,
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${authToken}`,
+        },
+        body: JSON.stringify(data),
+      });
+      const result = await response.json();
 
-    if (result.success) {
-      document.getElementById("categoryModal").style.display = "none";
-      loadCategories();
-      loadDashboard();
-    } else {
-      alert(result.error);
+      if (result.success) {
+        document.getElementById("categoryModal").style.display = "none";
+        loadCategories();
+        loadDashboard();
+      } else {
+        alert(result.error);
+      }
+    } catch (error) {
+      console.error("Error saving category:", error);
     }
-  } catch (error) {
-    console.error("Error saving category:", error);
-  }
-});
+  });
 
 async function deleteCategory(id) {
   if (!confirm("Are you sure you want to delete this category?")) return;
@@ -423,7 +438,7 @@ async function loadTags() {
               </div>
             </td>
           </tr>
-        `
+        `,
         )
         .join("");
     }

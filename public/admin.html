@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -6,7 +6,10 @@
     <title>Admin Panel - NotesApp</title>
     <link rel="stylesheet" href="css/style.css" />
     <link rel="stylesheet" href="css/admin.css" />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
   </head>
   <body>
     <div class="admin-wrapper">
@@ -18,7 +21,7 @@
             <span class="logo-text">Admin Panel</span>
           </div>
         </div>
-        
+
         <nav class="admin-nav">
           <button class="admin-nav-item active" data-section="dashboard">
             <span class="nav-icon">📊</span>
@@ -44,7 +47,9 @@
 
         <div class="admin-sidebar-footer">
           <a href="/" class="btn btn-outline btn-block">← Back to App</a>
-          <button id="adminLogoutBtn" class="btn btn-ghost btn-block">Logout</button>
+          <button id="adminLogoutBtn" class="btn btn-ghost btn-block">
+            Logout
+          </button>
         </div>
       </aside>
 
@@ -56,7 +61,7 @@
             <h1>Dashboard</h1>
             <p>Overview of your application</p>
           </div>
-          
+
           <div class="stats-grid">
             <div class="stat-card">
               <div class="stat-icon">👥</div>
@@ -150,7 +155,9 @@
               <h1>Categories</h1>
               <p>Manage note categories</p>
             </div>
-            <button id="addCategoryBtn" class="btn btn-primary">+ Add Category</button>
+            <button id="addCategoryBtn" class="btn btn-primary">
+              + Add Category
+            </button>
           </div>
           <div class="table-container">
             <table class="admin-table">
@@ -215,7 +222,13 @@
             </select>
           </div>
           <div class="form-actions">
-            <button type="button" class="btn btn-secondary" data-close="editUserModal">Cancel</button>
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-close="editUserModal"
+            >
+              Cancel
+            </button>
             <button type="submit" class="btn btn-primary">Save Changes</button>
           </div>
         </form>
@@ -238,12 +251,21 @@
           </div>
           <div class="form-group">
             <label for="categoryDescription">Description</label>
-            <textarea id="categoryDescription" rows="2" maxlength="200"></textarea>
+            <textarea
+              id="categoryDescription"
+              rows="2"
+              maxlength="200"
+            ></textarea>
           </div>
           <div class="form-row-2col">
             <div class="form-group">
               <label for="categoryIcon">Icon (Emoji)</label>
-              <input type="text" id="categoryIcon" maxlength="5" placeholder="📁" />
+              <input
+                type="text"
+                id="categoryIcon"
+                maxlength="5"
+                placeholder="📁"
+              />
             </div>
             <div class="form-group">
               <label for="categoryColor">Color</label>
@@ -251,7 +273,13 @@
             </div>
           </div>
           <div class="form-actions">
-            <button type="button" class="btn btn-secondary" data-close="categoryModal">Cancel</button>
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-close="categoryModal"
+            >
+              Cancel
+            </button>
             <button type="submit" class="btn btn-primary">Save</button>
           </div>
         </form>
@@ -277,7 +305,13 @@
             <input type="color" id="tagColor" value="#6366f1" />
           </div>
           <div class="form-actions">
-            <button type="button" class="btn btn-secondary" data-close="tagModal">Cancel</button>
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-close="tagModal"
+            >
+              Cancel
+            </button>
             <button type="submit" class="btn btn-primary">Save</button>
           </div>
         </form>

@@ -91,11 +91,13 @@ authForm.addEventListener("submit", async (e) => {
 toggleAuthBtn.addEventListener("click", () => {
   isLoginMode = !isLoginMode;
   authTitle.textContent = isLoginMode ? "Welcome Back" : "Create Account";
-  document.querySelector('.auth-subtitle').textContent = isLoginMode 
-    ? "Sign in to access your notes" 
+  document.querySelector(".auth-subtitle").textContent = isLoginMode
+    ? "Sign in to access your notes"
     : "Register to start taking notes";
   authSubmitBtn.textContent = isLoginMode ? "Sign In" : "Create Account";
-  toggleAuthBtn.textContent = isLoginMode ? "Create New Account" : "Sign In Instead";
+  toggleAuthBtn.textContent = isLoginMode
+    ? "Create New Account"
+    : "Sign In Instead";
   authError.textContent = "";
 });
 
@@ -120,7 +122,7 @@ cancelBtn.addEventListener("click", () => {
 });
 
 window.addEventListener("click", (e) => {
-  if (e.target === noteModal || e.target.classList.contains('modal-overlay')) {
+  if (e.target === noteModal || e.target.classList.contains("modal-overlay")) {
     closeModal();
   }
 });
@@ -175,7 +177,7 @@ tagInput.addEventListener("keydown", (e) => {
 function checkAuthStatus() {
   const userRole = localStorage.getItem("userRole");
   const adminLink = document.getElementById("adminPanelLink");
-  
+
   if (authToken) {
     // User is logged in - show dashboard
     landingPage.style.display = "none";
@@ -186,7 +188,7 @@ function checkAuthStatus() {
     logoutBtn.style.display = "flex";
     newNoteBtn.style.display = "flex";
     notesContainer.style.display = "grid";
-    
+
     // Show admin link for admins
     if (adminLink) {
       adminLink.style.display = userRole === "admin" ? "flex" : "none";
@@ -207,11 +209,13 @@ function checkAuthStatus() {
 function showAuthModal() {
   authModal.style.display = "flex";
   authTitle.textContent = isLoginMode ? "Welcome Back" : "Create Account";
-  document.querySelector('.auth-subtitle').textContent = isLoginMode 
-    ? "Sign in to access your notes" 
+  document.querySelector(".auth-subtitle").textContent = isLoginMode
+    ? "Sign in to access your notes"
     : "Register to start taking notes";
   authSubmitBtn.textContent = isLoginMode ? "Sign In" : "Create Account";
-  toggleAuthBtn.textContent = isLoginMode ? "Create New Account" : "Sign In Instead";
+  toggleAuthBtn.textContent = isLoginMode
+    ? "Create New Account"
+    : "Sign In Instead";
   authForm.reset();
   authError.textContent = "";
 }
@@ -296,7 +300,7 @@ function openModal(note = null) {
 
     if (note.tags && note.tags.length > 0) {
       selectedTags = note.tags.map((tag) =>
-        typeof tag === "string" ? tag : tag.name
+        typeof tag === "string" ? tag : tag.name,
       );
       renderSelectedTags();
     }
@@ -346,7 +350,7 @@ function renderSelectedTags() {
         ${escapeHtml(tag)}
         <button type="button" class="tag-remove" onclick="removeTag('${escapeHtml(tag)}')">&times;</button>
       </span>
-    `
+    `,
     )
     .join("");
 }
@@ -356,7 +360,7 @@ function showTagSuggestions(searchTerm) {
     .filter(
       (tag) =>
         tag.name.toLowerCase().includes(searchTerm) &&
-        !selectedTags.includes(tag.name.toLowerCase())
+        !selectedTags.includes(tag.name.toLowerCase()),
     )
     .slice(0, 5);
 
@@ -367,7 +371,7 @@ function showTagSuggestions(searchTerm) {
         <div class="tag-suggestion-item" onclick="addTag('${escapeHtml(tag.name)}')">
           ${escapeHtml(tag.name)}
         </div>
-      `
+      `,
       )
       .join("");
   } else {
@@ -489,21 +493,21 @@ function displayNotes(notes) {
         <button class="btn btn-danger btn-sm" onclick="deleteNote('${note._id}')">🗑️ Delete</button>
       </div>
     </div>
-  `
+  `,
     )
     .join("");
 }
 
 function getCategoryIcon(category) {
   const icons = {
-    Work: '💼',
-    Personal: '👤',
-    Ideas: '💡',
-    Study: '📚',
-    Todo: '✅',
-    Other: '📁'
+    Work: "💼",
+    Personal: "👤",
+    Ideas: "💡",
+    Study: "📚",
+    Todo: "✅",
+    Other: "📁",
   };
-  return icons[category] || '📁';
+  return icons[category] || "📁";
 }
 
 async function saveNote() {
@@ -548,7 +552,7 @@ async function saveNote() {
     } else {
       alert(
         "Error saving note: " +
-          (result.errors ? result.errors.join(", ") : result.error)
+          (result.errors ? result.errors.join(", ") : result.error),
       );
     }
   } catch (error) {

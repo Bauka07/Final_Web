@@ -1,25 +1,48 @@
-/* ===== CSS Variables ===== */
+/* ===== CSS Variables (White/Blue Theme) ===== */
 :root {
-  --primary: #6366f1;
-  --primary-dark: #4f46e5;
-  --primary-light: #a5b4fc;
+  /* Primary Blues */
+  --primary: #3b82f6;
+  --primary-dark: #2563eb;
+  --primary-light: #93c5fd;
+  --primary-lighter: #dbeafe;
+
+  /* Secondary & Accent */
   --secondary: #f1f5f9;
-  --accent: #fbbf24;
+  --accent: #0ea5e9;
   --danger: #ef4444;
   --success: #22c55e;
+  --warning: #f59e0b;
+
+  /* Text Colors */
   --text-primary: #1e293b;
   --text-secondary: #64748b;
   --text-muted: #94a3b8;
+
+  /* Background Colors */
   --bg-primary: #f8fafc;
   --bg-secondary: #ffffff;
+  --bg-tertiary: #f1f5f9;
+
+  /* Border & Shadows */
   --border: #e2e8f0;
+  --border-light: #f1f5f9;
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
   --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
   --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+
+  /* Misc */
   --radius: 12px;
   --radius-sm: 8px;
   --sidebar-width: 280px;
   --transition: all 0.2s ease;
+
+  /* Landing Gradient */
+  --gradient-start: #3b82f6;
+  --gradient-end: #1d4ed8;
+
+  /* Card Colors */
+  --card-bg: #ffffff;
+  --card-hover: #f8fafc;
 }
 
 /* ===== Reset & Base ===== */
@@ -30,7 +53,13 @@
 }
 
 body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-family:
+    "Inter",
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    sans-serif;
   background: var(--bg-primary);
   color: var(--text-primary);
   line-height: 1.6;
@@ -46,7 +75,12 @@ body {
 /* ===== Landing Page ===== */
 .landing-page {
   min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(
+    135deg,
+    var(--gradient-start) 0%,
+    var(--gradient-end) 100%
+  );
+  transition: background 0.5s ease;
 }
 
 .landing-nav {
@@ -77,6 +111,7 @@ body {
 .nav-buttons {
   display: flex;
   gap: 12px;
+  align-items: center;
 }
 
 /* Hero Section */
@@ -129,12 +164,14 @@ body {
 
 .demo-card {
   position: absolute;
-  background: white;
+  background: var(--card-bg);
   border-radius: var(--radius);
   padding: 20px;
   width: 260px;
   box-shadow: var(--shadow-lg);
-  transition: transform 0.3s ease;
+  transition:
+    transform 0.3s ease,
+    background 0.3s ease;
 }
 
 .demo-card:hover {
@@ -192,8 +229,9 @@ body {
 
 /* Features Section */
 .features {
-  background: white;
+  background: var(--bg-secondary);
   padding: 80px 40px;
+  transition: background 0.3s ease;
 }
 
 .features-title {
@@ -245,11 +283,15 @@ body {
 
 /* Landing Footer */
 .landing-footer {
-  background: var(--text-primary);
-  color: rgba(255, 255, 255, 0.8);
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
   text-align: center;
   padding: 30px 40px;
   font-size: 14px;
+  border-top: 1px solid var(--border);
+  transition:
+    background 0.3s ease,
+    color 0.3s ease;
 }
 
 /* Dashboard Page */
@@ -266,15 +308,15 @@ body {
     text-align: center;
     padding: 60px 20px;
   }
-  
+
   .hero-title {
     font-size: 36px;
   }
-  
+
   .hero-image {
     display: none;
   }
-  
+
   .hero-buttons {
     justify-content: center;
   }
@@ -404,6 +446,12 @@ body {
   padding: 20px;
   border-top: 1px solid var(--border);
   display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.user-section {
+  display: flex;
   align-items: center;
   justify-content: space-between;
 }
@@ -493,7 +541,7 @@ body {
 }
 
 .note-card.pinned::before {
-  content: '📌';
+  content: "📌";
   position: absolute;
   top: 12px;
   right: 16px;
@@ -525,7 +573,7 @@ body {
 }
 
 .category-badge {
-  background: var(--primary-light);
+  background: var(--primary-lighter);
   color: var(--primary-dark);
   padding: 4px 12px;
   border-radius: 20px;
@@ -680,8 +728,12 @@ body {
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 .modal-overlay {
@@ -704,11 +756,11 @@ body {
 }
 
 @keyframes slideUp {
-  from { 
+  from {
     transform: translateY(20px);
     opacity: 0;
   }
-  to { 
+  to {
     transform: translateY(0);
     opacity: 1;
   }
@@ -1019,7 +1071,7 @@ body {
 
 .auth-divider::before,
 .auth-divider::after {
-  content: '';
+  content: "";
   flex: 1;
   height: 1px;
   background: var(--border);
@@ -1065,7 +1117,9 @@ body {
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .loading {
@@ -1101,7 +1155,7 @@ body {
   .sidebar {
     width: 240px;
   }
-  
+
   .main-content {
     margin-left: 240px;
     padding: 24px;
@@ -1112,15 +1166,15 @@ body {
   .sidebar {
     transform: translateX(-100%);
   }
-  
+
   .main-content {
     margin-left: 0;
   }
-  
+
   .notes-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .form-row-2col {
     grid-template-columns: 1fr;
   }

@@ -42,7 +42,7 @@ export const register = async (req, res, next) => {
       process.env.JWT_SECRET,
       {
         expiresIn: process.env.JWT_EXPIRES_IN,
-      }
+      },
     );
 
     res.status(201).json({
@@ -99,7 +99,7 @@ export const login = async (req, res, next) => {
       process.env.JWT_SECRET,
       {
         expiresIn: process.env.JWT_EXPIRES_IN,
-      }
+      },
     );
 
     res.status(200).json({

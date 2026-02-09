@@ -27,7 +27,7 @@ const userSchema = new mongoose.Schema(
   },
   {
     timestamps: true,
-  }
+  },
 );
 
 // Hash password before saving
@@ -38,7 +38,7 @@ userSchema.pre("save", async function () {
   }
 
   const salt = await bcrypt.genSalt(
-    parseInt(process.env.BCRYPT_SALT_ROUNDS) || 10
+    parseInt(process.env.BCRYPT_SALT_ROUNDS) || 10,
   );
   this.password = await bcrypt.hash(this.password, salt);
 });

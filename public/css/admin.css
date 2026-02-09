@@ -366,21 +366,21 @@
   .admin-sidebar {
     width: 80px;
   }
-  
+
   .admin-sidebar-header .logo-text,
   .admin-nav-item span:not(.nav-icon) {
     display: none;
   }
-  
+
   .admin-nav-item {
     justify-content: center;
     padding: 14px;
   }
-  
+
   .admin-main {
     margin-left: 80px;
   }
-  
+
   .dashboard-grid {
     grid-template-columns: 1fr;
   }

@@ -1,11 +1,14 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>NotesApp - Organize Your Thoughts</title>
     <link rel="stylesheet" href="css/style.css" />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
   </head>
   <body>
     <!-- Landing Page (shown when not logged in) -->
@@ -18,16 +21,20 @@
           </div>
           <div class="nav-buttons">
             <button id="openLoginBtn" class="btn btn-ghost">Sign In</button>
-            <button id="openRegisterBtn" class="btn btn-primary">Get Started</button>
+            <button id="openRegisterBtn" class="btn btn-primary">
+              Get Started
+            </button>
           </div>
         </div>
       </nav>
 
       <section class="hero">
         <div class="hero-content">
-          <h1 class="hero-title">Capture Your Ideas,<br>Organize Your Life</h1>
+          <h1 class="hero-title">
+            Capture Your Ideas,<br />Organize Your Life
+          </h1>
           <p class="hero-subtitle">
-            A simple and beautiful note-taking app to help you stay organized. 
+            A simple and beautiful note-taking app to help you stay organized.
             Create, categorize, and find your notes with ease.
           </p>
           <div class="hero-buttons">
@@ -66,12 +73,17 @@
           <div class="feature-card">
             <div class="feature-icon">📂</div>
             <h3>Organize by Category</h3>
-            <p>Keep your notes sorted with Work, Personal, Ideas, Study, and more.</p>
+            <p>
+              Keep your notes sorted with Work, Personal, Ideas, Study, and
+              more.
+            </p>
           </div>
           <div class="feature-card">
             <div class="feature-icon">🏷️</div>
             <h3>Tag Your Notes</h3>
-            <p>Add custom tags to quickly find related notes across categories.</p>
+            <p>
+              Add custom tags to quickly find related notes across categories.
+            </p>
           </div>
           <div class="feature-card">
             <div class="feature-icon">📌</div>
@@ -81,7 +93,9 @@
           <div class="feature-card">
             <div class="feature-icon">🎨</div>
             <h3>Color Code</h3>
-            <p>Personalize your notes with custom colors for visual organization.</p>
+            <p>
+              Personalize your notes with custom colors for visual organization.
+            </p>
           </div>
           <div class="feature-card">
             <div class="feature-icon">🔒</div>
@@ -91,7 +105,10 @@
           <div class="feature-card">
             <div class="feature-icon">⚡</div>
             <h3>Fast & Simple</h3>
-            <p>Clean interface designed for quick note-taking without distractions.</p>
+            <p>
+              Clean interface designed for quick note-taking without
+              distractions.
+            </p>
           </div>
         </div>
       </section>
@@ -117,24 +134,42 @@
               <label for="authEmail">Email Address</label>
               <div class="input-wrapper">
                 <span class="input-icon">✉️</span>
-                <input type="email" id="authEmail" placeholder="your@email.com" required />
+                <input
+                  type="email"
+                  id="authEmail"
+                  placeholder="your@email.com"
+                  required
+                />
               </div>
             </div>
             <div class="form-group">
               <label for="authPassword">Password</label>
               <div class="input-wrapper">
                 <span class="input-icon">🔒</span>
-                <input type="password" id="authPassword" placeholder="••••••••" required />
+                <input
+                  type="password"
+                  id="authPassword"
+                  placeholder="••••••••"
+                  required
+                />
               </div>
             </div>
             <div id="authError" class="error-message"></div>
-            <button type="submit" class="btn btn-primary btn-block" id="authSubmitBtn">
+            <button
+              type="submit"
+              class="btn btn-primary btn-block"
+              id="authSubmitBtn"
+            >
               Sign In
             </button>
             <div class="auth-divider">
               <span>or</span>
             </div>
-            <button type="button" class="btn btn-outline btn-block" id="toggleAuthBtn">
+            <button
+              type="button"
+              class="btn btn-outline btn-block"
+              id="toggleAuthBtn"
+            >
               Create New Account
             </button>
           </form>
@@ -143,7 +178,7 @@
     </div>
 
     <!-- Dashboard (shown when logged in) -->
-    <div id="dashboardPage" class="app-wrapper" style="display: none;">
+    <div id="dashboardPage" class="app-wrapper" style="display: none">
       <!-- Sidebar -->
       <aside class="sidebar">
         <div class="sidebar-header">
@@ -152,12 +187,15 @@
             <span class="logo-text">NotesApp</span>
           </div>
         </div>
-        
+
         <nav class="sidebar-nav">
-          <button id="newNoteBtn" class="btn btn-primary btn-block new-note-btn">
+          <button
+            id="newNoteBtn"
+            class="btn btn-primary btn-block new-note-btn"
+          >
             <span>+</span> New Note
           </button>
-          
+
           <div class="nav-section">
             <h3 class="nav-title">Filters</h3>
             <button id="showAllBtn" class="nav-item active">
@@ -169,7 +207,7 @@
               <span>Pinned</span>
             </button>
           </div>
-          
+
           <div class="nav-section">
             <h3 class="nav-title">Categories</h3>
             <select id="categoryFilter" class="filter-select">
@@ -182,7 +220,7 @@
               <option value="Other">📁 Other</option>
             </select>
           </div>
-          
+
           <div class="nav-section">
             <h3 class="nav-title">Tags</h3>
             <select id="tagFilter" class="filter-select">
@@ -190,20 +228,25 @@
             </select>
           </div>
         </nav>
-        
+
         <div class="sidebar-footer">
-          <a href="/admin.html" id="adminPanelLink" class="btn btn-outline btn-sm" style="display: none; margin-bottom: 8px;">
+          <a
+            href="/admin.html"
+            id="adminPanelLink"
+            class="btn btn-outline btn-sm btn-block"
+            style="display: none"
+          >
             ⚙️ Admin Panel
           </a>
-          <div class="user-profile" id="userProfile">
-            <div class="user-avatar">👤</div>
-            <div class="user-details">
-              <span id="userInfo" class="user-email">Not logged in</span>
+          <div class="user-section">
+            <div class="user-profile" id="userProfile">
+              <div class="user-avatar">👤</div>
+              <div class="user-details">
+                <span id="userInfo" class="user-email">Not logged in</span>
+              </div>
             </div>
+            <button id="logoutBtn" class="btn btn-ghost btn-sm">Logout</button>
           </div>
-          <button id="logoutBtn" class="btn btn-ghost btn-sm">
-            Logout
-          </button>
         </div>
       </aside>
 
@@ -236,15 +279,25 @@
         </div>
         <form id="noteForm">
           <input type="hidden" id="noteId" />
-          
+
           <div class="form-group">
             <label for="title">Title</label>
-            <input type="text" id="title" placeholder="Enter note title..." required />
+            <input
+              type="text"
+              id="title"
+              placeholder="Enter note title..."
+              required
+            />
           </div>
 
           <div class="form-group">
             <label for="content">Content</label>
-            <textarea id="content" rows="6" placeholder="Write your note content here..." required></textarea>
+            <textarea
+              id="content"
+              rows="6"
+              placeholder="Write your note content here..."
+              required
+            ></textarea>
           </div>
 
           <div class="form-row-2col">
@@ -262,7 +315,12 @@
             </div>
             <div class="form-group">
               <label for="color">Note Color</label>
-              <input type="color" id="color" value="#ffffff" class="color-input" />
+              <input
+                type="color"
+                id="color"
+                value="#ffffff"
+                class="color-input"
+              />
             </div>
           </div>
 
@@ -289,7 +347,9 @@
           </div>
 
           <div class="modal-footer">
-            <button type="button" class="btn btn-ghost" id="cancelBtn">Cancel</button>
+            <button type="button" class="btn btn-ghost" id="cancelBtn">
+              Cancel
+            </button>
             <button type="submit" class="btn btn-primary">Save Note</button>
           </div>
         </form>

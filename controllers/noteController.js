@@ -24,7 +24,7 @@ export const createNote = async (req, res, next) => {
     const note = await Note.create(noteData);
     const populatedNote = await Note.findById(note._id).populate(
       "tags",
-      "name color"
+      "name color",
     );
 
     res.status(201).json({
